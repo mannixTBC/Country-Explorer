@@ -24,7 +24,7 @@ class App extends Component{
   
   componentDidMount(){
    
-    fetch('https://restcountries.eu/rest/v2/all').then(response => {
+    fetch('https://restcountries.com/v2/all').then(response => {
       return response.json()
     }).then(
       countries => {
@@ -38,9 +38,9 @@ class App extends Component{
 getDataByName = ()=>{
   const { searchfield } = this.state
   if(searchfield){
-      return fetch(`https://restcountries.eu/rest/v2/name/${searchfield}`).then(response=>response.json())
+      return fetch(`https://restcountries.com/v2/name/${searchfield}`).then(response=>response.json())
   }else{
-      const data = fetch(`https://restcountries.eu/rest/v2/all`).then(response=>response.json())
+      const data = fetch(`https://restcountries.com/v2/all`).then(response=>response.json())
       
       return data
   }
@@ -49,30 +49,29 @@ getDataByName = ()=>{
 getDataByCapital = ()=>{
   const {searchfield} = this.state
   if(searchfield){
-  return fetch(`https://restcountries.eu/rest/v2/capital/${searchfield}`).then(response=>response.json())
+  return fetch(`https://restcountries.com/v2/capital/${searchfield}`).then(response=>response.json())
   }
   else{
-    return fetch(`https://restcountries.eu/rest/v2/all`).then(response=>response.json())
+    return fetch(`https://restcountries.com/v2/all`).then(response=>response.json())
   }
 }
 
 getDataByRegion = ()=>{
   
   if(this.state.region){
-  return fetch(`https://restcountries.eu/rest/v2/region/${this.state.region}`).then(response=>response.json())
+  return fetch(`https://restcountries.com/v2/region/${this.state.region}`).then(response=>response.json())
   }
   else{
-    return fetch(`https://restcountries.eu/rest/v2/all`).then(response=>response.json())
+    return fetch(`https://restcountries.com/v2/all`).then(response=>response.json())
   }
 }
 
 getDataByCode = ()=>{
   const{searchfield} = this.state
-  
   if(searchfield && searchfield.length === 2){
-  return fetch(`https://restcountries.eu/rest/v2/alpha/${searchfield}`).then(response=>response.json())
+  return fetch(`https://restcountries.com/v2/alpha/${searchfield}`).then(response=>response.json())
   } else{
-    return fetch(`https://restcountries.eu/rest/v2/all`).then(response=>response.json())
+    return fetch(`https://restcountries.com/v2/all`).then(response=>response.json())
   }
 }
 
@@ -95,6 +94,10 @@ onCodeChange = async (event) => {
   this.setState({
     countriesApiName:countries
   })
+}
+onRegionChange = (event) => {
+  this.setState({region:event.target.value},()=>this.getCountries())
+
 }
 
 
@@ -122,14 +125,11 @@ onCodeChange = async (event) => {
   getCountries = async () => {
     const regionCountries = await this.getDataByRegion()
     const searchCountries  = await this.getSearchData();
-    const filteredCountries = regionCountries.filter(country => searchCountries.find(country2 => country.capital === country2.capital));
+    const filteredCountries = regionCountries.filter(country => searchCountries.find(country2 => country.capital === country2.capital));   
     this.setState({countriesApiName:filteredCountries})
     
   }
- onRegionChange = (event) => {
-   this.setState({region:event.target.value},()=>this.getCountries())
- 
- }
+
 
   render(){
     
